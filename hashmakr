@@ -1,0 +1,38 @@
+#!/usr/bin/env php
+
+<?php
+    require 'vendor/autoload.php';
+    use Medoo\Medoo;
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+
+    echo "Attempting connection to database\n";
+
+    $database = new Medoo([
+        'database_type' => $_ENV['DATABASE_TYPE'],
+        'database_name' => $_ENV['DATABASE_NAME'],
+        'server' => $_ENV['SERVER'],
+        'username' => $_ENV['USERNAME'],
+        'password' => $_ENV['PASSWORD'],
+        'port' => $_ENV['PORT']
+    ]);
+
+    echo $_ENV['USERNAME'] . '@' . $_ENV['SERVER'] . ':' . $_ENV['DATABASE_NAME'] . ' (connection successful)';
+    echo "\n";
+
+    $users = $database->select('users',[
+        'id',
+        'password'
+    ]);
+    
+    foreach ($users as $user) {
+        $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT);
+        $database->update('users', [
+            'password' => $user['password']
+        ], [
+            'id' => $user['id']
+        ]);
+    }
+
+    echo "Successfully hashed all passwords in table. Exiting.";
+?>

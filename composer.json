@@ -1,0 +1,16 @@
+{
+    "name": "timvonwerne/hashmakr",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tim von Werne",
+            "email": "me@vonwernet.de"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+		"ext-pdo": "*",
+        "catfan/medoo": "^1.7",
+        "vlucas/phpdotenv": "^5.2"
+    }
+}
